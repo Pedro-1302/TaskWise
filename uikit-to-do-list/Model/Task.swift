@@ -8,6 +8,7 @@
 import Foundation
 
 struct Task: Codable {
+    let id: String
     let sender: String
     let name: String
     let description: String

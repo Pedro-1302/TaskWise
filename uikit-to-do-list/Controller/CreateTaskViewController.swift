@@ -46,13 +46,16 @@ class CreateTaskViewController: UIViewController {
         if taskDescriptionTextField.text == "" { return }
         if dateTextField.text == "" { return }
         
+        let id = UUID().uuidString
+        
         if let taskName = taskNameTextField.text,
            let taskDesc = taskDescriptionTextField.text,
            let date = dateTextField.text,
            let taskSender = Auth.auth().currentUser?.email {
-            
+
             db.collection(K.collectionName).addDocument (
                 data: [
+                    K.id: id,
                     K.sender: taskSender,
                     K.taskName: taskName,
                     K.taskDesc: taskDesc,

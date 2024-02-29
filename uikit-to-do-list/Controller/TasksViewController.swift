@@ -41,47 +41,49 @@ class TasksViewController: UIViewController {
     
     private func loadTasks() {
         guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
-    
-            db.collection(K.collectionName)
-                .order(by: K.taskDate)
-                .whereField(K.sender, isEqualTo: currentUserEmail)
-                .addSnapshotListener { (querySnapshot, error) in
-                    
-                    self.tasks = []
-                    
-                    if let err = error {
-                        print("There was an issue retrieving data from firestore, \(err.localizedDescription).")
-                    } else {
-                        if let snapshotDocuments = querySnapshot?.documents {
-                            for doc in snapshotDocuments {
-                                let data = doc.data()
+        
+        db.collection(K.collectionName)
+            .order(by: K.taskDate)
+            .addSnapshotListener { (querySnapshot, error) in
+                
+                self.tasks = []
+                
+                if let err = error {
+                    print("There was an issue retrieving data from firestore, \(err.localizedDescription).")
+                } else {
+                    if let snapshotDocuments = querySnapshot?.documents {
+                        for doc in snapshotDocuments {
+                            let data = doc.data()
+                            
+                            if let id = data[K.id] as? String,
+                               let currentUserEmail = data[K.sender] as? String,
+                               let taskName = data[K.taskName] as? String,
+                               let taskDesc = data[K.taskDesc] as? String,
+                               let date = data[K.taskDate] as? String {
                                 
-                                if let currentUserEmail = data[K.sender] as? String,
-                                   let taskName = data[K.taskName] as? String,
-                                   let taskDesc = data[K.taskDesc] as? String,
-                                   let date = data[K.taskDate] as? String {
-                                    
-                                    let newTask = Task(sender: currentUserEmail, name: taskName, description: taskDesc, date: date)
-                                    
+                                let newTask = Task(id: id, sender: currentUserEmail, name: taskName, description: taskDesc, date: date)
+                                
+                                if currentUserEmail == Auth.auth().currentUser?.email {
                                     self.tasks.append(newTask)
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    let indexPath = IndexPath(row: self.tasks.count - 1, section: 0)
                                     
-                                    DispatchQueue.main.async {
-                                        let indexPath = IndexPath(row: self.tasks.count - 1, section: 0)
-                                        
-                                        if indexPath.count > 8 {
-                                            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-                                        }
+                                    if indexPath.count > 8 {
+                                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                                     }
                                     
                                     self.tableView.reloadData()
-                                    
-                                    print("Carreguei com os dados do banco")
                                 }
+              
+                                print("Tasks loaded from Firestore successfully.")
                             }
                         }
+                    }
                     
                 }
-        }
+            }
     }
 }
 
@@ -96,17 +98,36 @@ extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            tableView.beginUpdates()
-            
-            tasks.remove(at: indexPath.row)
-            
-            let task = tasks[indexPath.row]
-            
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            tableView.reloadData()
-            
-            tableView.endUpdates()
-        }
+              tableView.beginUpdates()
+              
+              let row = indexPath.row
+              let deletedTask = tasks[row]
+              
+              deleteTask(taskId: deletedTask.id)
+              tasks.remove(at: row)
+              tableView.deleteRows(at: [indexPath], with: .fade)
+              
+              tableView.endUpdates()
+          }
+    }
+    
+    func deleteTask(taskId: String) {
+        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
+        
+        db.collection(K.collectionName)
+            .whereField(K.sender, isEqualTo: currentUserEmail)
+            .whereField(K.id, isEqualTo: taskId)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error deleting task from Firestore: \(error.localizedDescription)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        document.reference.delete()
+                    }
+                    
+                    print("Task deleted from Firestore successfully.")
+                }
+            }
     }
 }
 

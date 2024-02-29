@@ -12,6 +12,7 @@ struct K {
     static let loginSegue = "LoginToTasks"
     static let registerSegue = "RegisterToTasks"
     static let collectionName = "Tasks"
+    static let id = "id"
     static let sender = "sender"
     static let taskName = "name"
     static let taskDesc = "description"
