@@ -35,7 +35,7 @@ class TasksViewController: UIViewController {
         )
         
         createTaskViewController.reloadTableViewDelegate = self
-        
+
         loadTasks()
     }
     
@@ -85,6 +85,31 @@ class TasksViewController: UIViewController {
                 }
             }
     }
+    
+    private func deleteTask(taskId: String) {
+        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
+        
+        db.collection(K.collectionName)
+            .whereField(K.sender, isEqualTo: currentUserEmail)
+            .whereField(K.id, isEqualTo: taskId)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error deleting task from Firestore: \(error.localizedDescription)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        document.reference.delete()
+                    }
+                    
+                    print("Task deleted from Firestore successfully.")
+                }
+            }
+    }
+    
+    private func formatText(from dateText: String) -> String {
+        let index = dateText.index(dateText.startIndex, offsetBy: 5)
+        let dateFormatted = String(dateText.prefix(upTo: index))
+        return dateFormatted
+    }
 }
 
 extension TasksViewController: UITableViewDelegate {
@@ -109,25 +134,6 @@ extension TasksViewController: UITableViewDelegate {
               
               tableView.endUpdates()
           }
-    }
-    
-    func deleteTask(taskId: String) {
-        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
-        
-        db.collection(K.collectionName)
-            .whereField(K.sender, isEqualTo: currentUserEmail)
-            .whereField(K.id, isEqualTo: taskId)
-            .getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error deleting task from Firestore: \(error.localizedDescription)")
-                } else {
-                    for document in querySnapshot!.documents {
-                        document.reference.delete()
-                    }
-                    
-                    print("Task deleted from Firestore successfully.")
-                }
-            }
     }
 }
 
@@ -167,13 +173,6 @@ extension TasksViewController: UITableViewDataSource {
         }
         
         return safeCell
-    }
-    
-    
-    func formatText(from dateText: String) -> String {
-        let index = dateText.index(dateText.startIndex, offsetBy: 5)
-        let dateFormatted = String(dateText.prefix(upTo: index))
-        return dateFormatted
     }
 }
 
