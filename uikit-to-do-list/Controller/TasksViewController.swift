@@ -18,7 +18,7 @@ class TasksViewController: UIViewController {
     var tasks: [Task] = []
     
     var createTaskViewController = CreateTaskViewController()
-            
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,7 +26,7 @@ class TasksViewController: UIViewController {
         
         tableView.backgroundColor = .white
         tableView.dataSource = self
-                
+        
         tableView.register(
             UINib(
                 nibName: K.cellNibName,
@@ -40,14 +40,17 @@ class TasksViewController: UIViewController {
     }
     
     private func loadTasks() {
+        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
+    
             db.collection(K.collectionName)
                 .order(by: K.taskDate)
+                .whereField(K.sender, isEqualTo: currentUserEmail)
                 .addSnapshotListener { (querySnapshot, error) in
                     
                     self.tasks = []
                     
                     if let err = error {
-                        print(";;;; There was an issue retrieving data from firestore, \(err.localizedDescription).")
+                        print("There was an issue retrieving data from firestore, \(err.localizedDescription).")
                     } else {
                         if let snapshotDocuments = querySnapshot?.documents {
                             for doc in snapshotDocuments {
@@ -76,6 +79,7 @@ class TasksViewController: UIViewController {
                                 }
                             }
                         }
+                    
                 }
         }
     }
@@ -95,9 +99,12 @@ extension TasksViewController: UITableViewDelegate {
             tableView.beginUpdates()
             
             tasks.remove(at: indexPath.row)
+            
+            let task = tasks[indexPath.row]
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()
-
+            
             tableView.endUpdates()
         }
     }
@@ -107,23 +114,23 @@ extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
     }
-        
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as? TaskTableViewCell
-
+        
         let row = indexPath.row
         let message = tasks[row]
-
+        
         guard let safeCell = cell else { return UITableViewCell() }
-
+        
         safeCell.dateLabel.text = formatText(from: message.date)
         safeCell.taskNameLabel.text = message.name
         safeCell.taskDescriptionLabel.text = message.description
-
+        
         let totalSections = tableView.numberOfSections
         let lastSectionIndex = totalSections - 1
         let totalRowsInLastSection = tableView.numberOfRows(inSection: lastSectionIndex)
-
+        
         if totalRowsInLastSection == 1 {
             safeCell.taskBackgroundView.layer.cornerRadius = 10.0
         } else {
@@ -137,10 +144,10 @@ extension TasksViewController: UITableViewDataSource {
                 safeCell.taskBackgroundView.layer.cornerRadius = 0.0
             }
         }
-
+        
         return safeCell
     }
-
+    
     
     func formatText(from dateText: String) -> String {
         let index = dateText.index(dateText.startIndex, offsetBy: 5)
