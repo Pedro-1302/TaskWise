@@ -44,6 +44,6 @@ extension UserTabBarController: UITabBarControllerDelegate {
             navigationItem.rightBarButtonItem = nil
         }
     }
-    
+
 }
 

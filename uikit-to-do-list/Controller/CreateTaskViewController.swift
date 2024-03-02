@@ -13,6 +13,8 @@ protocol ReloadTableViewDelegate {
 }
 
 class CreateTaskViewController: UIViewController {
+    
+    
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var taskDescriptionTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -22,7 +24,8 @@ class CreateTaskViewController: UIViewController {
     private var selectedIndexPath: IndexPath?
     
     var reloadTableViewDelegate: ReloadTableViewDelegate?
-                
+    
+         
     let db = Firestore.firestore()
         
     override func viewDidLoad() {
@@ -36,9 +39,8 @@ class CreateTaskViewController: UIViewController {
         
         dateTextField.delegate = self
         
-        configureDatePicker()
         
-        print("\(Auth.auth().currentUser?.email)")
+        configureDatePicker()
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
@@ -78,6 +80,10 @@ class CreateTaskViewController: UIViewController {
         }
     }
     
+    func didFetchData() {
+        self.title = "Update Tasks"
+        taskNameTextField.text = "Oi gata, turo bom?"
+    }
 }
 
 extension CreateTaskViewController: UITextFieldDelegate {

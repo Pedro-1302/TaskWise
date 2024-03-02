@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+
 class TasksViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -16,7 +17,7 @@ class TasksViewController: UIViewController {
     let db = Firestore.firestore()
     
     var tasks: [Task] = []
-    
+        
     var createTaskViewController = CreateTaskViewController()
     
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ class TasksViewController: UIViewController {
         
         tableView.backgroundColor = .white
         tableView.dataSource = self
+        tableView.delegate = self
         
         tableView.register(
             UINib(
@@ -35,7 +37,7 @@ class TasksViewController: UIViewController {
         )
         
         createTaskViewController.reloadTableViewDelegate = self
-
+        
         loadTasks()
     }
     
@@ -123,17 +125,24 @@ extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-              tableView.beginUpdates()
-              
-              let row = indexPath.row
-              let deletedTask = tasks[row]
-              
-              deleteTask(taskId: deletedTask.id)
-              tasks.remove(at: row)
-              tableView.deleteRows(at: [indexPath], with: .fade)
-              
-              tableView.endUpdates()
-          }
+            tableView.beginUpdates()
+            
+            let row = indexPath.row
+            let deletedTask = tasks[row]
+            
+            deleteTask(taskId: deletedTask.id)
+            tasks.remove(at: row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            tableView.endUpdates()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedTask = tasks[indexPath.row]
+        print("Task selecionada: \(selectedTask.name)")
+   
+        self.performSegue(withIdentifier: "UpdateNewTask", sender: self)
     }
 }
 
