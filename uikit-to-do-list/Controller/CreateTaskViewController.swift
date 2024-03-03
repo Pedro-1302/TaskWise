@@ -14,20 +14,25 @@ protocol ReloadTableViewDelegate {
 
 class CreateTaskViewController: UIViewController {
     
-    
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var taskDescriptionTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     
     private let datePicker: UIDatePicker = UIDatePicker()
-    private var dateFormatter = DateFormatter()
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter
+    }()
     private var selectedIndexPath: IndexPath?
     
     var reloadTableViewDelegate: ReloadTableViewDelegate?
     
-         
     let db = Firestore.firestore()
-        
+    
+    var taskToEdit: Task?
+    var taskId: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,55 +44,71 @@ class CreateTaskViewController: UIViewController {
         
         dateTextField.delegate = self
         
-        
         configureDatePicker()
+        
+        if let taskToUpdate = taskToEdit {
+            taskId = taskToUpdate.id
+            
+            taskNameTextField.text = taskToUpdate.name
+            taskDescriptionTextField.text = taskToUpdate.description
+            dateTextField.text = taskToUpdate.date
+        }
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        if taskNameTextField.text == "" { return }
-        if taskDescriptionTextField.text == "" { return }
-        if dateTextField.text == "" { return }
+        let taskSender = Auth.auth().currentUser?.email ?? ""
+        let updatedTaskName = taskNameTextField.text ?? ""
+        let updatedTaskDesc = taskDescriptionTextField.text ?? ""
+        let updatedTaskDate = dateTextField.text ?? ""
         
-        let id = UUID().uuidString
-        
-        if let taskName = taskNameTextField.text,
-           let taskDesc = taskDescriptionTextField.text,
-           let date = dateTextField.text,
-           let taskSender = Auth.auth().currentUser?.email {
-
-            db.collection(K.collectionName).addDocument (
-                data: [
-                    K.id: id,
+        if let taskId = taskId {
+            db.collection(K.collectionName)
+                .document(taskId)
+                .updateData([
+                    K.id: taskId,
                     K.sender: taskSender,
-                    K.taskName: taskName,
-                    K.taskDesc: taskDesc,
-                    K.taskDate: date
-                ]) { (error) in
-                    if let err = error {
-                        print("There was an issue saving data to firestore, \(err.localizedDescription).")
+                    K.taskName: updatedTaskName,
+                    K.taskDesc: updatedTaskDesc,
+                    K.taskDate: updatedTaskDate
+                ]) { error in
+                    if let error = error {
+                        print("Error updating task: \(error.localizedDescription)")
                     } else {
-                        DispatchQueue.main.async {
-                            self.taskNameTextField.text = ""
-                            self.taskDescriptionTextField.text = ""
-                            self.dateTextField.text = ""
-                            self.dismiss(animated: true)
-                            self.reloadTableViewDelegate?.didUpdateTableView()
-                        }
-                                                
-                        print("Sucessfully saved data.")
+                        print("Task updated successfully.")
+                        self.dismissScreen()
+                    }
+                }
+        } else {
+            let newTaskId = UUID().uuidString
+            
+            db.collection(K.collectionName)
+                .document(newTaskId)
+                .setData([
+                    K.id: newTaskId,
+                    K.sender: taskSender,
+                    K.taskName: updatedTaskName,
+                    K.taskDesc: updatedTaskDesc,
+                    K.taskDate: updatedTaskDate
+                ]) { error in
+                    if let error = error {
+                        print("Error adding new task: \(error.localizedDescription)")
+                    } else {
+                        print("New task added successfully.")
+                        self.dismissScreen()
                     }
                 }
         }
     }
     
-    func didFetchData() {
-        self.title = "Update Tasks"
-        taskNameTextField.text = "Oi gata, turo bom?"
+    func dismissScreen() {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true)
+            self.reloadTableViewDelegate?.didUpdateTableView()
+        }
     }
 }
 
 extension CreateTaskViewController: UITextFieldDelegate {
-    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == dateTextField {
             datePicker.date = dateFormatter.date(from: textField.text ?? "") ?? Date()
@@ -98,7 +119,7 @@ extension CreateTaskViewController: UITextFieldDelegate {
         if textField == dateTextField {
             datePicker.date = dateFormatter.date(from: textField.text ?? "") ?? Date()
         }
-        
+
         return true
     }
     
@@ -149,6 +170,10 @@ extension CreateTaskViewController: UITextFieldDelegate {
     
     // Update the value in textField after user stop rolling the datepicker wheel
     @objc func datePickerValueChanged() {
+        guard !dateTextField.isFirstResponder else {
+            return
+        }
+
         dateTextField.text = dateFormatter.string(from: datePicker.date)
     }
     

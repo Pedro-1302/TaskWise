@@ -9,7 +9,6 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-
 class TasksViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -17,8 +16,8 @@ class TasksViewController: UIViewController {
     let db = Firestore.firestore()
     
     var tasks: [Task] = []
-        
-    var createTaskViewController = CreateTaskViewController()
+    
+    let createTaskViewController = CreateTaskViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +77,7 @@ class TasksViewController: UIViewController {
                                     
                                     self.tableView.reloadData()
                                 }
-              
+                                
                                 print("Tasks loaded from Firestore successfully.")
                             }
                         }
@@ -112,6 +111,18 @@ class TasksViewController: UIViewController {
         let dateFormatted = String(dateText.prefix(upTo: index))
         return dateFormatted
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "UpdateNewTask" {
+             let destinationVC = segue.destination as! CreateTaskViewController
+
+             if let selectedTask = sender as? Task {
+                 destinationVC.taskToEdit = selectedTask
+             }
+
+             destinationVC.title = "Edit Task"
+         }
+    }
 }
 
 extension TasksViewController: UITableViewDelegate {
@@ -141,8 +152,8 @@ extension TasksViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedTask = tasks[indexPath.row]
         print("Task selecionada: \(selectedTask.name)")
-   
-        self.performSegue(withIdentifier: "UpdateNewTask", sender: self)
+
+        self.performSegue(withIdentifier: "UpdateNewTask", sender: selectedTask)
     }
 }
 
@@ -188,6 +199,5 @@ extension TasksViewController: UITableViewDataSource {
 extension TasksViewController: ReloadTableViewDelegate {
     func didUpdateTableView() {
         loadTasks()
-        tableView.reloadData()
     }
 }
