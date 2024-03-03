@@ -13,17 +13,19 @@ protocol ReloadTableViewDelegate {
 }
 
 class CreateTaskViewController: UIViewController {
-    
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var taskDescriptionTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
     
     private let datePicker: UIDatePicker = UIDatePicker()
+    @IBOutlet weak var modalNavItem: UINavigationItem!
+    
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         return formatter
     }()
+    
     private var selectedIndexPath: IndexPath?
     
     var reloadTableViewDelegate: ReloadTableViewDelegate?
@@ -31,20 +33,20 @@ class CreateTaskViewController: UIViewController {
     let db = Firestore.firestore()
     
     var taskToEdit: Task?
-    var taskId: String?
+    private var taskId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         taskNameTextField.stylizeTextField(placeholder: "Enter task name")
-        
         taskDescriptionTextField.stylizeTextField(placeholder: "Enter task description")
-        
         dateTextField.stylizeTextField(placeholder: "Select finish date")
         
         dateTextField.delegate = self
         
         configureDatePicker()
+        
+        self.modalNavItem.title = "Create Task"
         
         if let taskToUpdate = taskToEdit {
             taskId = taskToUpdate.id
@@ -52,6 +54,7 @@ class CreateTaskViewController: UIViewController {
             taskNameTextField.text = taskToUpdate.name
             taskDescriptionTextField.text = taskToUpdate.description
             dateTextField.text = taskToUpdate.date
+            self.modalNavItem.title = "Update Task"
         }
     }
     

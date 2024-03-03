@@ -41,8 +41,6 @@ class TasksViewController: UIViewController {
     }
     
     private func loadTasks() {
-        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
-        
         db.collection(K.collectionName)
             .order(by: K.taskDate)
             .addSnapshotListener { (querySnapshot, error) in

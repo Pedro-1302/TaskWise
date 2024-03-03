@@ -112,7 +112,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="te1-Be-0cx">
-                                <rect key="frame" x="16" y="178.33333333333334" width="343" height="70"/>
+                                <rect key="frame" x="16" y="170" width="343" height="70"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Adress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qt0-ms-A0j">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="21"/>
@@ -144,7 +144,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5bl-gk-htU">
-                                <rect key="frame" x="16" y="264.33333333333331" width="343" height="70"/>
+                                <rect key="frame" x="16" y="256" width="343" height="70"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W4n-Fk-Czu">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="21"/>
@@ -176,7 +176,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pC5-RQ-H1i">
-                                <rect key="frame" x="16" y="366.33333333333331" width="343" height="40"/>
+                                <rect key="frame" x="16" y="358" width="343" height="40"/>
                                 <color key="backgroundColor" name="AccentColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bVT-JG-CGS"/>
@@ -446,6 +446,7 @@
                     </view>
                     <connections>
                         <outlet property="dateTextField" destination="WTp-Uh-cNN" id="YJd-nL-XIj"/>
+                        <outlet property="modalNavItem" destination="QyG-aw-Lsz" id="Z4Z-n7-Vel"/>
                         <outlet property="taskDescriptionTextField" destination="lMU-NF-VsJ" id="pZS-fc-RgZ"/>
                         <outlet property="taskNameTextField" destination="oGk-3P-ODu" id="LSt-Ds-XL3"/>
                     </connections>
