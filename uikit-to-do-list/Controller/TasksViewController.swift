@@ -19,23 +19,17 @@ class TasksViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupTableView()
+        createTaskViewController.reloadTableViewDelegate = self
+        loadTasks()
+    }
+    
+    private func setupTableView() {
         self.navigationItem.hidesBackButton = true
-        
         tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
-        
-        tableView.register(
-            UINib(
-                nibName: K.cellNibName,
-                bundle: nil
-            ), forCellReuseIdentifier: K.cellIdentifier
-        )
-        
-        createTaskViewController.reloadTableViewDelegate = self
-        
-        loadTasks()
+        tableView.register(UINib(nibName: K.cellNibName, bundle: nil), forCellReuseIdentifier: K.cellIdentifier)
     }
     
     private func loadTasks() {
@@ -80,17 +74,18 @@ extension TasksViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            tableView.beginUpdates()
-            
-            let row = indexPath.row
-            let deletedTask = TaskManager.shared.tasks[row]
-            
-            TaskManager.shared.deleteTask(taskId: deletedTask.id)
-            TaskManager.shared.tasks.remove(at: row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            tableView.endUpdates()
+            deleteTask(at: indexPath)
+            tableView.reloadData()
         }
+    }
+    
+    private func deleteTask(at indexPath: IndexPath) {
+        let row = indexPath.row
+        let deletedTask = TaskManager.shared.tasks[row]
+        
+        TaskManager.shared.deleteTask(taskId: deletedTask.id)
+        TaskManager.shared.tasks.remove(at: row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,25 +112,28 @@ extension TasksViewController: UITableViewDataSource {
         safeCell.taskNameLabel.text = message.name
         safeCell.taskDescriptionLabel.text = message.description
         
-        let totalSections = tableView.numberOfSections
-        let lastSectionIndex = totalSections - 1
-        let totalRowsInLastSection = tableView.numberOfRows(inSection: lastSectionIndex)
-        
-        if totalRowsInLastSection == 1 {
-            safeCell.taskBackgroundView.layer.cornerRadius = 10.0
-        } else {
-            if indexPath.row == 0 {
-                safeCell.taskBackgroundView.layer.cornerRadius = 10.0
-                safeCell.taskBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            } else if indexPath.row == totalRowsInLastSection - 1 {
-                safeCell.taskBackgroundView.layer.cornerRadius = 10.0
-                safeCell.taskBackgroundView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-            } else {
-                safeCell.taskBackgroundView.layer.cornerRadius = 0.0
-            }
-        }
+        setCornerRadius(for: safeCell, at: indexPath)
         
         return safeCell
+    }
+    
+    private func setCornerRadius(for cell: TaskTableViewCell, at indexPath: IndexPath) {
+        let totalRowsInLastSection = tableView.numberOfRows(inSection: tableView.numberOfSections - 1)
+        
+        if totalRowsInLastSection == 1 {
+            cell.taskBackgroundView.layer.cornerRadius = 10.0
+            cell.taskBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        } else {
+            let isFirstRow = indexPath.row == 0
+            let isLastRow = indexPath.row == totalRowsInLastSection - 1
+            
+            if isFirstRow || isLastRow {
+                cell.taskBackgroundView.layer.cornerRadius = 10.0
+                cell.taskBackgroundView.layer.maskedCorners = isFirstRow ? [.layerMinXMinYCorner, .layerMaxXMinYCorner] : [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            } else {
+                cell.taskBackgroundView.layer.cornerRadius = 0.0
+            }
+        }
     }
 }
 

@@ -12,7 +12,6 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     @IBAction func logoutButtonPressed(_ sender: UIButton) {
@@ -23,4 +22,5 @@ class ProfileViewController: UIViewController {
             print("Error signing out : %@", signOutError)
         }
     }
+    
 }

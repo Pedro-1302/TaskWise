@@ -21,7 +21,10 @@ class TaskManager {
     var tasks: [Task] = []
     
     let db = Firestore.firestore()
-    
+}
+
+// MARK: - AUTH
+extension TaskManager {
     func checkAuthRegister(emailNotVerified: String?, passwordNotVerified: String?) {
         if let email = emailNotVerified, let password = passwordNotVerified {
             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
@@ -45,7 +48,10 @@ class TaskManager {
             }
         }
     }
-    
+}
+
+// MARK: - CRUD
+extension TaskManager {
     func loadTasks(completion: @escaping () -> Void) {
         let db = Firestore.firestore()
         db.collection(K.collectionName)
@@ -101,49 +107,48 @@ class TaskManager {
             }
     }
     
-    func createTask(taskId: String?, taskSender: String, taskName: String, taskDesc: String, taskDate: String, completion: @escaping () -> Void) {
-                
-        if let taskId = taskId {
-            db.collection(K.collectionName)
-                .document(taskId)
-                .updateData([
-                    K.id: taskId,
-                    K.sender: taskSender,
-                    K.taskName: taskName,
-                    K.taskDesc: taskDesc,
-                    K.taskDate: taskDate
-                ]) { error in
-                    if let error = error {
-                        print("An error ocurred: \(error.localizedDescription).")
-                    } else {
-                        
-                        completion()
-                        
-                        print("Task updated sucessfully.")
-                    }
+    func createTask(taskSender: String, taskName: String, taskDesc: String, taskDate: String, completion: @escaping () -> Void) {
+        
+        let newTaskId = UUID().uuidString
+        
+        db.collection(K.collectionName)
+            .document(newTaskId)
+            .setData([
+                K.id: newTaskId,
+                K.sender: taskSender,
+                K.taskName: taskName,
+                K.taskDesc: taskDesc,
+                K.taskDate: taskDate
+            ]) { error in
+                if let error = error {
+                    print("An error ocurred: \(error.localizedDescription).")
+                } else {
+                    
+                    completion()
+                    
+                    print("Task created sucessfully.")
                 }
-        } else {
-            let newTaskId = UUID().uuidString
-            
-            db.collection(K.collectionName)
-                .document(newTaskId)
-                .setData([
-                    K.id: newTaskId,
-                    K.sender: taskSender,
-                    K.taskName: taskName,
-                    K.taskDesc: taskDesc,
-                    K.taskDate: taskDate
-                ]) { error in
-                    if let error = error {
-                        print("An error ocurred: \(error.localizedDescription).")
-                    } else {
-                        
-                        completion()
-                        
-                        print("Task created sucessfully.")
-                    }
+            }
+    }
+    
+    func updateTask(taskId: String, taskSender: String, taskName: String, taskDesc: String, taskDate: String, completion: @escaping () -> Void) {
+        db.collection(K.collectionName)
+            .document(taskId)
+            .updateData([
+                K.id: taskId,
+                K.sender: taskSender,
+                K.taskName: taskName,
+                K.taskDesc: taskDesc,
+                K.taskDate: taskDate
+            ]) { error in
+                if let error = error {
+                    print("An error ocurred: \(error.localizedDescription).")
+                } else {
+                    
+                    completion()
+                    
+                    print("Task updated sucessfully.")
                 }
-        }
+            }
     }
 }
-

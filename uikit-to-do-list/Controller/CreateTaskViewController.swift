@@ -60,16 +60,23 @@ class CreateTaskViewController: UIViewController {
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
         guard let taskSender = Auth.auth().currentUser?.email,
-              let updatedTaskName = taskNameTextField.text, !updatedTaskName.isEmpty,
-              let updatedTaskDesc = taskDescriptionTextField.text, !updatedTaskDesc.isEmpty,
-              let updatedTaskDate = dateTextField.text, !updatedTaskDate.isEmpty else {
+              let taskName = taskNameTextField.text, !taskName.isEmpty,
+              let taskDesc = taskDescriptionTextField.text, !taskDesc.isEmpty,
+              let taskDate = dateTextField.text, !taskDate.isEmpty else {
                 print("Please fill in all the required fields.")
                 return
         }
-
-        TaskManager.shared.createTask(taskId: taskId, taskSender: taskSender, taskName: updatedTaskName, taskDesc: updatedTaskDesc, taskDate: updatedTaskDate) {
-            self.dismissScreen()
+        
+        if let taskID = taskId {
+            TaskManager.shared.updateTask(taskId: taskID, taskSender: taskSender, taskName: taskName, taskDesc: taskDesc, taskDate: taskDate) {
+                self.dismissScreen()
+            }
+        } else {
+            TaskManager.shared.createTask(taskSender: taskSender, taskName: taskName, taskDesc: taskDesc, taskDate: taskDate) {
+                self.dismissScreen()
+            }
         }
+        
     }
     
     func dismissScreen() {
