@@ -15,8 +15,6 @@ class TasksViewController: UIViewController {
     
     let db = Firestore.firestore()
     
-    var tasks: [Task] = []
-    
     let createTaskViewController = CreateTaskViewController()
     
     override func viewDidLoad() {
@@ -41,69 +39,17 @@ class TasksViewController: UIViewController {
     }
     
     private func loadTasks() {
-        db.collection(K.collectionName)
-            .order(by: K.taskDate)
-            .addSnapshotListener { (querySnapshot, error) in
-                
-                self.tasks = []
-                
-                if let err = error {
-                    print("There was an issue retrieving data from firestore, \(err.localizedDescription).")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            
-                            if let id = data[K.id] as? String,
-                               let currentUserEmail = data[K.sender] as? String,
-                               let taskName = data[K.taskName] as? String,
-                               let taskDesc = data[K.taskDesc] as? String,
-                               let date = data[K.taskDate] as? String {
-                                
-                                let newTask = Task(id: id, sender: currentUserEmail, name: taskName, description: taskDesc, date: date)
-                                
-                                if currentUserEmail == Auth.auth().currentUser?.email {
-                                    self.tasks.append(newTask)
-                                }
-                                
-                                DispatchQueue.main.async {
-                                    let indexPath = IndexPath(row: self.tasks.count - 1, section: 0)
-                                    
-                                    if indexPath.count > 8 {
-                                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-                                    }
-                                    
-                                    self.tableView.reloadData()
-                                }
-                                
-                                print("Tasks loaded from Firestore successfully.")
-                            }
-                        }
-                    }
-                    
-                }
+        TaskManager.shared.loadTasks {
+            let indexPath = IndexPath(row: TaskManager.shared.tasks.count - 1, section: 0)
+            
+            if indexPath.count > 8 {
+                self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
             }
+            
+            self.tableView.reloadData()
+        }
     }
-    
-    private func deleteTask(taskId: String) {
-        guard let currentUserEmail = Auth.auth().currentUser?.email else { return }
-        
-        db.collection(K.collectionName)
-            .whereField(K.sender, isEqualTo: currentUserEmail)
-            .whereField(K.id, isEqualTo: taskId)
-            .getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error deleting task from Firestore: \(error.localizedDescription)")
-                } else {
-                    for document in querySnapshot!.documents {
-                        document.reference.delete()
-                    }
-                    
-                    print("Task deleted from Firestore successfully.")
-                }
-            }
-    }
-    
+
     private func formatText(from dateText: String) -> String {
         let index = dateText.index(dateText.startIndex, offsetBy: 5)
         let dateFormatted = String(dateText.prefix(upTo: index))
@@ -112,14 +58,14 @@ class TasksViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "UpdateNewTask" {
-             let destinationVC = segue.destination as! CreateTaskViewController
-
-             if let selectedTask = sender as? Task {
-                 destinationVC.taskToEdit = selectedTask
-             }
-
-             destinationVC.title = "Edit Task"
-         }
+            let destinationVC = segue.destination as! CreateTaskViewController
+            
+            if let selectedTask = sender as? Task {
+                destinationVC.taskToEdit = selectedTask
+            }
+            
+            destinationVC.title = "Edit Task"
+        }
     }
 }
 
@@ -137,10 +83,10 @@ extension TasksViewController: UITableViewDelegate {
             tableView.beginUpdates()
             
             let row = indexPath.row
-            let deletedTask = tasks[row]
+            let deletedTask = TaskManager.shared.tasks[row]
             
-            deleteTask(taskId: deletedTask.id)
-            tasks.remove(at: row)
+            TaskManager.shared.deleteTask(taskId: deletedTask.id)
+            TaskManager.shared.tasks.remove(at: row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             tableView.endUpdates()
@@ -148,23 +94,22 @@ extension TasksViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedTask = tasks[indexPath.row]
-        print("Task selecionada: \(selectedTask.name)")
-
+        let selectedTask = TaskManager.shared.tasks[indexPath.row]
+        
         self.performSegue(withIdentifier: "UpdateNewTask", sender: selectedTask)
     }
 }
 
 extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
+        return TaskManager.shared.tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as? TaskTableViewCell
         
         let row = indexPath.row
-        let message = tasks[row]
+        let message = TaskManager.shared.tasks[row]
         
         guard let safeCell = cell else { return UITableViewCell() }
         

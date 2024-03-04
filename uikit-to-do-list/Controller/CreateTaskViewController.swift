@@ -59,47 +59,16 @@ class CreateTaskViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        let taskSender = Auth.auth().currentUser?.email ?? ""
-        let updatedTaskName = taskNameTextField.text ?? ""
-        let updatedTaskDesc = taskDescriptionTextField.text ?? ""
-        let updatedTaskDate = dateTextField.text ?? ""
-        
-        if let taskId = taskId {
-            db.collection(K.collectionName)
-                .document(taskId)
-                .updateData([
-                    K.id: taskId,
-                    K.sender: taskSender,
-                    K.taskName: updatedTaskName,
-                    K.taskDesc: updatedTaskDesc,
-                    K.taskDate: updatedTaskDate
-                ]) { error in
-                    if let error = error {
-                        print("Error updating task: \(error.localizedDescription)")
-                    } else {
-                        print("Task updated successfully.")
-                        self.dismissScreen()
-                    }
-                }
-        } else {
-            let newTaskId = UUID().uuidString
-            
-            db.collection(K.collectionName)
-                .document(newTaskId)
-                .setData([
-                    K.id: newTaskId,
-                    K.sender: taskSender,
-                    K.taskName: updatedTaskName,
-                    K.taskDesc: updatedTaskDesc,
-                    K.taskDate: updatedTaskDate
-                ]) { error in
-                    if let error = error {
-                        print("Error adding new task: \(error.localizedDescription)")
-                    } else {
-                        print("New task added successfully.")
-                        self.dismissScreen()
-                    }
-                }
+        guard let taskSender = Auth.auth().currentUser?.email,
+              let updatedTaskName = taskNameTextField.text, !updatedTaskName.isEmpty,
+              let updatedTaskDesc = taskDescriptionTextField.text, !updatedTaskDesc.isEmpty,
+              let updatedTaskDate = dateTextField.text, !updatedTaskDate.isEmpty else {
+                print("Please fill in all the required fields.")
+                return
+        }
+
+        TaskManager.shared.createTask(taskId: taskId, taskSender: taskSender, taskName: updatedTaskName, taskDesc: updatedTaskDesc, taskDate: updatedTaskDate) {
+            self.dismissScreen()
         }
     }
     
@@ -122,7 +91,7 @@ extension CreateTaskViewController: UITextFieldDelegate {
         if textField == dateTextField {
             datePicker.date = dateFormatter.date(from: textField.text ?? "") ?? Date()
         }
-
+        
         return true
     }
     
@@ -140,7 +109,7 @@ extension CreateTaskViewController: UITextFieldDelegate {
     // Configure the TextField do receive DatePicker format
     func configureDatePicker() {
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        
+
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .wheels
         
@@ -176,7 +145,7 @@ extension CreateTaskViewController: UITextFieldDelegate {
         guard !dateTextField.isFirstResponder else {
             return
         }
-
+        
         dateTextField.text = dateFormatter.string(from: datePicker.date)
     }
     
