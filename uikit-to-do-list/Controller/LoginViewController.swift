@@ -6,12 +6,13 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    
+    var taskManager = TaskManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,19 +20,12 @@ class LoginViewController: UIViewController {
         stylizeTextField(emailTextField, placeholder: "Enter your email address")
         
         stylizeTextField(passwordTextField, placeholder: "Enter your password")
+        
+        taskManager.authenticationDelegate = self
     }
     
     @IBAction func loginButtonPressed(_ sender: UIButton) {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                
-                if let err = error {
-                    print(err.localizedDescription)
-                } else {
-                    self.performSegue(withIdentifier: K.loginSegue, sender: self)
-                }
-            }
-        }
+        taskManager.checkAuthLogin(emailNotVerified: emailTextField.text, passwordNotVerified: passwordTextField.text)
     }
     
     func stylizeTextField(_ textField: UITextField, placeholder: String) {
@@ -43,5 +37,17 @@ class LoginViewController: UIViewController {
         textField.layer.borderColor = UIColor.black.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 5.0
+    }
+}
+
+extension LoginViewController: AuthenticationDelegate {
+    func didReturnWithError(with error: Error) {
+        print(error.localizedDescription)
+
+    }
+    
+    func didPerformSegue(identifier: String) {
+        print("Deu")
+        self.performSegue(withIdentifier: identifier, sender: self)
     }
 }

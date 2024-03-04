@@ -13,23 +13,33 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
+    var taskManager = TaskManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         emailTextField.stylizeTextField(placeholder: "Enter your email address")
 
         passwordTextField.stylizeTextField(placeholder: "Enter your password")
+        
+        taskManager.authenticationDelegate = self
     }
 
     @IBAction func registerButtonPressed(_ sender: UIButton) {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-                if let err = error {
-                    print(err.localizedDescription)
-                } else {
-                    self.performSegue(withIdentifier: K.registerSegue, sender: self)
-                }
-            }
-        }
+        taskManager.checkAuthRegister(emailNotVerified: emailTextField.text, passwordNotVerified: passwordTextField.text)
     }
 }
+
+extension RegisterViewController: AuthenticationDelegate {
+    func didReturnWithError(with error: Error) {
+        print(error.localizedDescription)
+
+    }
+    
+    func didPerformSegue(identifier: String) {
+        self.performSegue(withIdentifier: identifier, sender: self)
+    }
+}
+
+
+
