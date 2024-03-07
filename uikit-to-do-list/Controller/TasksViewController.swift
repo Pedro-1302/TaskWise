@@ -12,10 +12,12 @@ import FirebaseAuth
 class TasksViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    
+        
     let db = Firestore.firestore()
     
     let createTaskViewController = CreateTaskViewController()
+    
+    var overlayView: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +43,61 @@ class TasksViewController: UIViewController {
             }
             
             self.tableView.reloadData()
+            self.toggleOverlayView()
         }
+    }
+    
+    private func deleteTask(at indexPath: IndexPath) {
+        let row = indexPath.row
+        let deletedTask = TaskManager.shared.tasks[row]
+        
+        TaskManager.shared.deleteTask(taskId: deletedTask.id)
+        TaskManager.shared.tasks.remove(at: row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        
+        self.toggleOverlayView()
+    }
+    
+    private func toggleOverlayView() {
+        if TaskManager.shared.tasks.isEmpty {
+            showOverlayView()
+        } else {
+            hideOverlayView()
+        }
+    }
+
+    private func showOverlayView() {
+        if overlayView == nil {
+            let messageLabel = UILabel()
+            messageLabel.textAlignment = .center
+            messageLabel.textColor = .gray
+            messageLabel.preferredMaxLayoutWidth = 400
+            messageLabel.font = UIFont.systemFont(ofSize: 22.0)
+
+            let attributedText = NSMutableAttributedString(string: "Click on '+' to add a new Task.")
+            let range = (attributedText.string as NSString).range(of: "+")
+            attributedText.addAttribute(.foregroundColor, value: UIColor.accent, range: range)
+
+            messageLabel.attributedText = attributedText
+
+            overlayView = UIView(frame: tableView.bounds)
+            overlayView?.addSubview(messageLabel)
+
+            messageLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                messageLabel.centerXAnchor.constraint(equalTo: overlayView!.centerXAnchor),
+                messageLabel.centerYAnchor.constraint(equalTo: overlayView!.centerYAnchor)
+            ])
+        }
+
+        tableView.backgroundView = overlayView
+        tableView.separatorStyle = .none
+    }
+
+
+    private func hideOverlayView() {
+        tableView.backgroundView = nil
+        tableView.separatorStyle = .singleLine
     }
 
     private func formatText(from dateText: String) -> String {
@@ -79,25 +135,19 @@ extension TasksViewController: UITableViewDelegate {
         }
     }
     
-    private func deleteTask(at indexPath: IndexPath) {
-        let row = indexPath.row
-        let deletedTask = TaskManager.shared.tasks[row]
-        
-        TaskManager.shared.deleteTask(taskId: deletedTask.id)
-        TaskManager.shared.tasks.remove(at: row)
-        tableView.deleteRows(at: [indexPath], with: .fade)
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedTask = TaskManager.shared.tasks[indexPath.row]
         
         self.performSegue(withIdentifier: "UpdateNewTask", sender: selectedTask)
     }
+        
 }
 
 extension TasksViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return TaskManager.shared.tasks.count
+        let tasksCount = TaskManager.shared.tasks.count
+   
+        return tasksCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
