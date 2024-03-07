@@ -25,7 +25,11 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginButtonPressed(_ sender: UIButton) {
-        taskManager.checkAuthLogin(emailNotVerified: emailTextField.text, passwordNotVerified: passwordTextField.text)
+        guard let email = emailTextField.text, !email.isEmpty, let password = passwordTextField.text, !password.isEmpty else {
+            return ErrorHandler.showErrorBox(in: self, title: "Please fill in all the required fields.")
+        }
+        
+        taskManager.checkAuthLogin(emailNotVerified: email, passwordNotVerified: password)
     }
     
     func stylizeTextField(_ textField: UITextField, placeholder: String) {
@@ -42,12 +46,10 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: AuthenticationDelegate {
     func didReturnWithError(with error: Error) {
-        print(error.localizedDescription)
-
+        ErrorHandler.showErrorBox(in: self, title: error.localizedDescription)
     }
     
     func didPerformSegue(identifier: String) {
-        print("Deu")
         self.performSegue(withIdentifier: identifier, sender: self)
     }
 }

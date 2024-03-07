@@ -52,6 +52,7 @@
 		D0BB36772B7C46BA00525995 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BB36752B7C46B900525995 /* TaskTableViewCell.swift */; };
 		D0BB36782B7C46BA00525995 /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0BB36762B7C46B900525995 /* TaskTableViewCell.xib */; };
 		D0C85D402B953E5000B4CC82 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C85D3F2B953E5000B4CC82 /* TaskManager.swift */; };
+		D0D6B6CD2B99E5090082AAC8 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D6B6CC2B99E5090082AAC8 /* ErrorHandler.swift */; };
 		D0DC782F2B7A93B900834CCD /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DC782E2B7A93B900834CCD /* Task.swift */; };
 		D0EEE24D2B93D9CB00145D55 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D0EEE24C2B93D9CB00145D55 /* IQKeyboardManagerSwift */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 		D0BB36752B7C46B900525995 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		D0BB36762B7C46B900525995 /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
 		D0C85D3F2B953E5000B4CC82 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		D0D6B6CC2B99E5090082AAC8 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		D0DC782E2B7A93B900834CCD /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -157,6 +159,7 @@
 			children = (
 				D07348592B785E18001D19FD /* Extensions */,
 				D000F6862B7847EF00D43A2C /* Constants.swift */,
+				D0D6B6CC2B99E5090082AAC8 /* ErrorHandler.swift */,
 			);
 			path = Aux;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				D000F6872B7847EF00D43A2C /* Constants.swift in Sources */,
 				D077243C2B7801D700FCB834 /* SceneDelegate.swift in Sources */,
 				D000F6852B7846D800D43A2C /* TasksViewController.swift in Sources */,
+				D0D6B6CD2B99E5090082AAC8 /* ErrorHandler.swift in Sources */,
 				D0C85D402B953E5000B4CC82 /* TaskManager.swift in Sources */,
 				D000F6892B784BBB00D43A2C /* CreateTaskViewController.swift in Sources */,
 			);
