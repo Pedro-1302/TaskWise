@@ -63,8 +63,7 @@ class CreateTaskViewController: UIViewController {
               let taskName = taskNameTextField.text, !taskName.isEmpty,
               let taskDesc = taskDescriptionTextField.text, !taskDesc.isEmpty,
               let taskDate = dateTextField.text, !taskDate.isEmpty else {
-                print("Please fill in all the required fields.")
-                return
+                return ErrorHandler.showErrorBox(in: self, title: "Please fill in all the required fields.")
         }
         
         if let taskID = taskId {
