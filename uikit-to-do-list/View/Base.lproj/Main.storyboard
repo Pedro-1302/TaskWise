@@ -230,7 +230,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ONy-Ul-U0R">
-                                <rect key="frame" x="117.66666666666669" y="386" width="140" height="40"/>
+                                <rect key="frame" x="117.66666666666669" y="452" width="140" height="40"/>
                                 <color key="backgroundColor" name="AccentColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="Aul-7X-6sF"/>
@@ -247,7 +247,7 @@
                         <viewLayoutGuide key="safeArea" id="ldI-x7-hEt"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ONy-Ul-U0R" firstAttribute="centerY" secondItem="twp-mb-51q" secondAttribute="centerY" id="Je5-ba-96l"/>
+                            <constraint firstItem="ONy-Ul-U0R" firstAttribute="centerY" secondItem="twp-mb-51q" secondAttribute="centerY" constant="66" id="Je5-ba-96l"/>
                             <constraint firstItem="ONy-Ul-U0R" firstAttribute="centerX" secondItem="twp-mb-51q" secondAttribute="centerX" id="twZ-WM-FTx"/>
                         </constraints>
                     </view>
@@ -579,7 +579,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="K2v-fg-vev" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="bAi-OM-eOa">
-                        <rect key="frame" x="0.0" y="50" width="375" height="96"/>
+                        <rect key="frame" x="0.0" y="50" width="375" height="104.33333333333334"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -637,7 +637,7 @@
             <color red="1" green="0.79199999570846558" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemFillColor">
-            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

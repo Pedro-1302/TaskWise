@@ -499,6 +499,7 @@
 				INFOPLIST_FILE = "uikit-to-do-list/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = TaskWise;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TaskWise want to use your camera";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -534,6 +535,7 @@
 				INFOPLIST_FILE = "uikit-to-do-list/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = TaskWise;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TaskWise want to use your camera";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
