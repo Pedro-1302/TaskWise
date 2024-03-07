@@ -11,20 +11,19 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TaskCell" rowHeight="155" id="KGk-i7-Jjw" customClass="TaskTableViewCell" customModule="uikit_to_do_list" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="358" height="155"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TaskCell" rowHeight="218" id="KGk-i7-Jjw" customClass="TaskTableViewCell" customModule="uikit_to_do_list" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="358" height="218"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="358" height="155"/>
+                <rect key="frame" x="0.0" y="0.0" width="358" height="218"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4nM-4Q-Uea">
-                        <rect key="frame" x="10" y="0.0" width="338" height="66"/>
+                        <rect key="frame" x="10" y="0.0" width="338" height="218"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12/10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U9b-SH-ejh">
-                                <rect key="frame" x="8" y="22" width="48" height="22"/>
+                                <rect key="frame" x="8" y="22" width="48" height="174"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="Vaf-1k-vnZ"/>
                                     <constraint firstAttribute="width" constant="48" id="WPr-ET-Irz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -32,21 +31,20 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Am-t1-hqU">
-                                <rect key="frame" x="64" y="8" width="6" height="50"/>
+                                <rect key="frame" x="64" y="8" width="6" height="202"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="ZSs-6e-FbL"/>
                                     <constraint firstAttribute="width" constant="6" id="erm-1c-gqr"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Tittle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bbc-x8-ia1">
-                                <rect key="frame" x="78" y="8" width="252" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Tittle" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bbc-x8-ia1">
+                                <rect key="frame" x="78" y="8" width="252" height="72"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8mA-tX-fUa">
-                                <rect key="frame" x="78" y="37" width="252" height="122"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8mA-tX-fUa">
+                                <rect key="frame" x="78" y="88" width="252" height="122"/>
                                 <string key="text">Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem </string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -56,6 +54,7 @@
                         <color key="backgroundColor" name="AccentColor"/>
                         <constraints>
                             <constraint firstItem="bbc-x8-ia1" firstAttribute="top" secondItem="4nM-4Q-Uea" secondAttribute="top" constant="8" id="1bC-of-c88"/>
+                            <constraint firstAttribute="bottom" secondItem="8mA-tX-fUa" secondAttribute="bottom" constant="8" id="6Cl-W4-mdn"/>
                             <constraint firstAttribute="bottom" secondItem="2Am-t1-hqU" secondAttribute="bottom" constant="8" id="Eb4-vN-00U"/>
                             <constraint firstItem="2Am-t1-hqU" firstAttribute="leading" secondItem="U9b-SH-ejh" secondAttribute="trailing" constant="8" id="KJ8-gw-5RK"/>
                             <constraint firstAttribute="bottom" secondItem="U9b-SH-ejh" secondAttribute="bottom" constant="22" id="Mm4-OY-Mpv"/>
@@ -86,7 +85,7 @@
                 <outlet property="taskDescriptionLabel" destination="8mA-tX-fUa" id="OcZ-zu-kaI"/>
                 <outlet property="taskNameLabel" destination="bbc-x8-ia1" id="Xut-DP-PFJ"/>
             </connections>
-            <point key="canvasLocation" x="166.41221374045801" y="87.676056338028175"/>
+            <point key="canvasLocation" x="166.41221374045801" y="109.85915492957747"/>
         </tableViewCell>
     </objects>
     <resources>
