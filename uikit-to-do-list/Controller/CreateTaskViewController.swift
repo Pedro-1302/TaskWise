@@ -13,6 +13,7 @@ protocol ReloadTableViewDelegate {
 }
 
 class CreateTaskViewController: UIViewController {
+    
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var taskDescriptionTextField: UITextField!
     @IBOutlet weak var dateTextField: UITextField!
@@ -84,9 +85,11 @@ class CreateTaskViewController: UIViewController {
             self.reloadTableViewDelegate?.didUpdateTableView()
         }
     }
+    
 }
 
 extension CreateTaskViewController: UITextFieldDelegate {
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == dateTextField {
             datePicker.date = dateFormatter.date(from: textField.text ?? "") ?? Date()

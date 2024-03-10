@@ -42,9 +42,11 @@ class LoginViewController: UIViewController {
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 5.0
     }
+    
 }
 
 extension LoginViewController: AuthenticationDelegate {
+    
     func didReturnWithError(with error: Error) {
         ErrorHandler.showErrorBox(in: self, title: error.localizedDescription)
     }
@@ -52,4 +54,5 @@ extension LoginViewController: AuthenticationDelegate {
     func didPerformSegue(identifier: String) {
         self.performSegue(withIdentifier: identifier, sender: self)
     }
+    
 }

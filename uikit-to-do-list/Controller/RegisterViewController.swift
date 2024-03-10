@@ -32,9 +32,11 @@ class RegisterViewController: UIViewController {
         
         taskManager.checkAuthRegister(emailNotVerified: email, passwordNotVerified: password)
     }
+    
 }
 
 extension RegisterViewController: AuthenticationDelegate {
+    
     func didReturnWithError(with error: Error) {
         ErrorHandler.showErrorBox(in: self, title: error.localizedDescription)
     }
@@ -42,4 +44,5 @@ extension RegisterViewController: AuthenticationDelegate {
     func didPerformSegue(identifier: String) {
         self.performSegue(withIdentifier: identifier, sender: self)
     }
+    
 }

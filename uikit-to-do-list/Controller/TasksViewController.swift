@@ -117,9 +117,11 @@ class TasksViewController: UIViewController {
             destinationVC.title = "Edit Task"
         }
     }
+    
 }
 
 extension TasksViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -144,6 +146,7 @@ extension TasksViewController: UITableViewDelegate {
 }
 
 extension TasksViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let tasksCount = TaskManager.shared.tasks.count
    
@@ -185,10 +188,13 @@ extension TasksViewController: UITableViewDataSource {
             }
         }
     }
+    
 }
 
 extension TasksViewController: ReloadTableViewDelegate {
+    
     func didUpdateTableView() {
         loadTasks()
     }
+    
 }

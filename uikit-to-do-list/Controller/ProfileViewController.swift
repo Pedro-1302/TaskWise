@@ -64,20 +64,17 @@ class ProfileViewController: UIViewController {
     }
 
     @IBAction func logoutButtonPressed(_ sender: UIButton) {
-        do {
-            try Auth.auth().signOut()
-            tabBarController?.navigationController?.popToRootViewController(animated: true)
-        } catch let signOutError as NSError {
-            print("Error signing out : %@", signOutError)
-        }
+        
     }
     
 }
 
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as! UIImage
         // self.myImageView.image = image
         self.dismiss(animated: true, completion: nil)
     }
+    
 }

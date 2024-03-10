@@ -5,6 +5,7 @@
 //  Created by Pedro Franco on 11/02/24.
 //
 import UIKit
+import FirebaseAuth
 
 class UserTabBarController: UITabBarController {
     
@@ -26,6 +27,16 @@ class UserTabBarController: UITabBarController {
         self.performSegue(withIdentifier: "CreateNewTask", sender: self)
     }
     
+    @objc func logoutButtonTapped() {
+        do {
+            try Auth.auth().signOut()
+            self.navigationController?.popViewController(animated: true)
+            //tabBarController?.navigationController?.popToRootViewController(animated: true)
+        } catch let signOutError as NSError {
+            print("Error signing out : %@", signOutError)
+        }
+    }
+    
 }
 
 extension UserTabBarController: UITabBarControllerDelegate {
@@ -41,7 +52,11 @@ extension UserTabBarController: UITabBarControllerDelegate {
         
         if viewController is ProfileViewController {
             navigationItem.title = "Profile"
-            navigationItem.rightBarButtonItem = nil
+            
+            
+            let logOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutButtonTapped))
+            
+            navigationItem.rightBarButtonItem = logOutButton
         }
     }
 
