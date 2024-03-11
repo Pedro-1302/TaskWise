@@ -8,7 +8,6 @@ import UIKit
 import FirebaseAuth
 
 class UserTabBarController: UITabBarController {
-    
     private var customButton: UIButton!
     
     override func viewDidLoad() {
@@ -36,11 +35,9 @@ class UserTabBarController: UITabBarController {
             print("Error signing out : %@", signOutError)
         }
     }
-    
 }
 
 extension UserTabBarController: UITabBarControllerDelegate {
-    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if viewController is TasksViewController {
             navigationItem.title = "Tasks"
@@ -59,6 +56,5 @@ extension UserTabBarController: UITabBarControllerDelegate {
             navigationItem.rightBarButtonItem = logOutButton
         }
     }
-
 }
 

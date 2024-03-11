@@ -10,7 +10,6 @@ import Firebase
 import FirebaseAuth
 
 class TasksViewController: UIViewController {
-    
     @IBOutlet weak var tableView: UITableView!
         
     let db = Firestore.firestore()
@@ -117,11 +116,9 @@ class TasksViewController: UIViewController {
             destinationVC.title = "Edit Task"
         }
     }
-    
 }
 
 extension TasksViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -142,11 +139,9 @@ extension TasksViewController: UITableViewDelegate {
         
         self.performSegue(withIdentifier: "UpdateNewTask", sender: selectedTask)
     }
-        
 }
 
 extension TasksViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let tasksCount = TaskManager.shared.tasks.count
    
@@ -188,13 +183,10 @@ extension TasksViewController: UITableViewDataSource {
             }
         }
     }
-    
 }
 
 extension TasksViewController: ReloadTableViewDelegate {
-    
     func didUpdateTableView() {
         loadTasks()
     }
-    
 }

@@ -9,7 +9,6 @@ import UIKit
 import FirebaseAuth
 
 class RegisterViewController: UIViewController {
-    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
@@ -32,11 +31,9 @@ class RegisterViewController: UIViewController {
         
         taskManager.checkAuthRegister(emailNotVerified: email, passwordNotVerified: password)
     }
-    
 }
 
 extension RegisterViewController: AuthenticationDelegate {
-    
     func didReturnWithError(with error: Error) {
         ErrorHandler.showErrorBox(in: self, title: error.localizedDescription)
     }
@@ -44,5 +41,4 @@ extension RegisterViewController: AuthenticationDelegate {
     func didPerformSegue(identifier: String) {
         self.performSegue(withIdentifier: identifier, sender: self)
     }
-    
 }

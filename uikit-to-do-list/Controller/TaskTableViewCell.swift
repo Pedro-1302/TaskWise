@@ -8,7 +8,6 @@
 import UIKit
 
 class TaskTableViewCell: UITableViewCell {
-
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var taskNameLabel: UILabel!
     @IBOutlet weak var taskDescriptionLabel: UILabel!
@@ -21,5 +20,4 @@ class TaskTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
 }

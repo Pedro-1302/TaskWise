@@ -8,7 +8,6 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    
     @IBOutlet weak var appTitleLabel: UILabel!
     
     override func viewDidLoad() {
@@ -38,6 +37,5 @@ class HomeViewController: UIViewController {
             self.appTitleLabel.text = ""
         }
     }
-    
 }
 
