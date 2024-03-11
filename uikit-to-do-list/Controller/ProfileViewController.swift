@@ -14,11 +14,13 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Salva a imagem e relaciona ela ao usuário que esta logado nesse presente momento.
         if let uid = Auth.auth().currentUser?.uid,
-                  let savedImagePath = UserDefaults.standard.string(forKey: "userProfileImage_\(uid)") {
-                   let savedImage = UIImage(contentsOfFile: savedImagePath)
-                   myImageView.image = savedImage
-               }
+           let savedImagePath = UserDefaults.standard.string(forKey: "userProfileImage_\(uid)") {
+            let savedImage = UIImage(contentsOfFile: savedImagePath)
+            // Coloca a imagem vinculada ao usuário atual na imageView
+            myImageView.image = savedImage
+        }
         
         myImageView.layer.cornerRadius = 10
     }
@@ -74,21 +76,22 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
-                    self.myImageView.image = image
-
-                    // Salvar o caminho da imagem no UserDefaults com base no UID do usuário
-                    if let uid = Auth.auth().currentUser?.uid,
-                       let imageData = image.jpegData(compressionQuality: 1.0) {
-                        let uniqueFilename = UUID().uuidString
-                        let imagePath = getDocumentsDirectory().appendingPathComponent("\(uniqueFilename).jpg")
-                        UserDefaults.standard.set(imagePath.path, forKey: "userProfileImage_\(uid)")
-                        try? imageData.write(to: imagePath)
-                    }
-                }
-
-                self.dismiss(animated: true, completion: nil)
+            self.myImageView.image = image
+            
+            // Salvar o caminho da imagem no UserDefaults com base no UID do usuário
+            if let uid = Auth.auth().currentUser?.uid,
+               let imageData = image.jpegData(compressionQuality: 1.0) {
+                let uniqueFilename = UUID().uuidString
+                let imagePath = getDocumentsDirectory().appendingPathComponent("\(uniqueFilename).jpg")
+                UserDefaults.standard.set(imagePath.path, forKey: "userProfileImage_\(uid)")
+                try? imageData.write(to: imagePath)
+            }
+        }
+        
+        self.dismiss(animated: true, completion: nil)
     }
     
+    // Busca o diretório onde a imagem está
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
