@@ -29,8 +29,10 @@ class UserTabBarController: UITabBarController {
     @objc func logoutButtonTapped() {
         do {
             try Auth.auth().signOut()
-            self.navigationController?.popViewController(animated: true)
-            //tabBarController?.navigationController?.popToRootViewController(animated: true)
+            
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
         } catch let signOutError as NSError {
             print("Error signing out : %@", signOutError)
         }
@@ -49,8 +51,7 @@ extension UserTabBarController: UITabBarControllerDelegate {
         
         if viewController is ProfileViewController {
             navigationItem.title = "Profile"
-            
-            
+         
             let logOutButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutButtonTapped))
             
             navigationItem.rightBarButtonItem = logOutButton

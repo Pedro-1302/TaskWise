@@ -29,9 +29,13 @@ extension TaskManager {
         if let email = emailNotVerified, let password = passwordNotVerified {
             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                 if let err = error {
-                    self.authenticationDelegate?.didReturnWithError(with: err)
+                    DispatchQueue.main.async {
+                        self.authenticationDelegate?.didReturnWithError(with: err)
+                    }
                 } else {
-                    self.authenticationDelegate?.didPerformSegue(identifier: K.registerSegue)
+                    DispatchQueue.main.async {
+                        self.authenticationDelegate?.didPerformSegue(identifier: K.registerSegue)
+                    }
                 }
             }
         }
@@ -41,9 +45,13 @@ extension TaskManager {
         if let email = emailNotVerified, let password = passwordNotVerified {
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let err = error {
-                    self.authenticationDelegate?.didReturnWithError(with: err)
+                    DispatchQueue.main.async {
+                        self.authenticationDelegate?.didReturnWithError(with: err)
+                    }
                 } else {
-                    self.authenticationDelegate?.didPerformSegue(identifier: K.loginSegue)
+                    DispatchQueue.main.async {
+                        self.authenticationDelegate?.didPerformSegue(identifier: K.loginSegue)
+                    }
                 }
             }
         }
@@ -75,7 +83,9 @@ extension TaskManager {
                                 let newTask = Task(id: id, sender: currentUserEmail, name: taskName, description: taskDesc, date: date)
                                 
                                 if currentUserEmail == Auth.auth().currentUser?.email {
-                                    self.tasks.append(newTask)
+                                    DispatchQueue.main.async {
+                                        self.tasks.append(newTask)
+                                    }
                                 }
                                 
                                 completion()

@@ -24,7 +24,7 @@ class ProfileViewController: UIViewController {
         
         myImageView.layer.cornerRadius = 10
     }
-    
+
     @IBAction func chooseImageAction(_ sender: Any) {
         showImagePickerOptions()
     }
