@@ -29,13 +29,9 @@ extension TaskManager {
         if let email = emailNotVerified, let password = passwordNotVerified {
             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                 if let err = error {
-                    DispatchQueue.main.async {
-                        self.authenticationDelegate?.didReturnWithError(with: err)
-                    }
+                    self.authenticationDelegate?.didReturnWithError(with: err)
                 } else {
-                    DispatchQueue.main.async {
-                        self.authenticationDelegate?.didPerformSegue(identifier: K.registerSegue)
-                    }
+                    self.authenticationDelegate?.didPerformSegue(identifier: K.registerSegue)
                 }
             }
         }
@@ -45,13 +41,9 @@ extension TaskManager {
         if let email = emailNotVerified, let password = passwordNotVerified {
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let err = error {
-                    DispatchQueue.main.async {
-                        self.authenticationDelegate?.didReturnWithError(with: err)
-                    }
+                    self.authenticationDelegate?.didReturnWithError(with: err)
                 } else {
-                    DispatchQueue.main.async {
-                        self.authenticationDelegate?.didPerformSegue(identifier: K.loginSegue)
-                    }
+                    self.authenticationDelegate?.didPerformSegue(identifier: K.loginSegue)
                 }
             }
         }
@@ -83,9 +75,7 @@ extension TaskManager {
                                 let newTask = Task(id: id, sender: currentUserEmail, name: taskName, description: taskDesc, date: date)
                                 
                                 if currentUserEmail == Auth.auth().currentUser?.email {
-                                    DispatchQueue.main.async {
-                                        self.tasks.append(newTask)
-                                    }
+                                    self.tasks.append(newTask)
                                 }
                                 
                                 completion()

@@ -12,8 +12,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    private var buttonClicked = 0
-    private var taskManager = TaskManager()
+    var taskManager = TaskManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,11 +29,7 @@ class RegisterViewController: UIViewController {
             return ErrorHandler.showErrorBox(in: self, title: "Please fill in all the required fields.")
         }
         
-        if (buttonClicked > 1) {
-            return
-        } else {
-            taskManager.checkAuthRegister(emailNotVerified: email, passwordNotVerified: password)
-        }
+        taskManager.checkAuthRegister(emailNotVerified: email, passwordNotVerified: password)
     }
 }
 
@@ -44,9 +39,6 @@ extension RegisterViewController: AuthenticationDelegate {
     }
     
     func didPerformSegue(identifier: String) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: identifier, sender: self)
-            self.buttonClicked = 0
-        }
+        self.performSegue(withIdentifier: identifier, sender: self)
     }
 }

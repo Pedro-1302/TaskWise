@@ -11,8 +11,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    private var buttonClicked = 0
-    private var taskManager = TaskManager()
+    var taskManager = TaskManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,13 +27,8 @@ class LoginViewController: UIViewController {
         guard let email = emailTextField.text, !email.isEmpty, let password = passwordTextField.text, !password.isEmpty else {
             return ErrorHandler.showErrorBox(in: self, title: "Please fill in all the required fields.")
         }
-        buttonClicked += 1
         
-        if (buttonClicked > 1) {
-            return
-        } else {
-            taskManager.checkAuthLogin(emailNotVerified: email, passwordNotVerified: password)
-        }
+        taskManager.checkAuthLogin(emailNotVerified: email, passwordNotVerified: password)
     }
     
     func stylizeTextField(_ textField: UITextField, placeholder: String) {
@@ -55,9 +49,6 @@ extension LoginViewController: AuthenticationDelegate {
     }
     
     func didPerformSegue(identifier: String) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: identifier, sender: self)
-            self.buttonClicked = 0
-        }
+        self.performSegue(withIdentifier: identifier, sender: self)
     }
 }
