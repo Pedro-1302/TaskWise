@@ -23,6 +23,7 @@ class TasksViewController: UIViewController {
         setupTableView()
         createTaskViewController.reloadTableViewDelegate = self
         loadTasks()
+        toggleOverlayView()
     }
     
     private func setupTableView() {
@@ -40,9 +41,8 @@ class TasksViewController: UIViewController {
             if indexPath.count > 8 {
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
             }
-            
-            self.tableView.reloadData()
             self.toggleOverlayView()
+            self.tableView.reloadData()
         }
     }
     
